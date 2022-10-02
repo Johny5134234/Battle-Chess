@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Staatliches&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+:root {
+  font-size: 16px;
+  --light-blue: #96D6FA;
+  --blue: #46B9FA;
+  --green: #46fa6a;
+  --red: #F94E4E;
+  --white: #FFF;
+  --text: #1d1f22;
+  --light-text: #515963;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Staatliches", sans-serif;
+  margin: 0;
+  color: var(--text);
+  overflow: hidden;
+}
+
+button, input[type="submit"], input[type="reset"] {
+	background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+
+.App {
+  width: 100vw;
+  height: 100vh;
+}
+
+svg {
+  fill: currentColor !important;
+}
