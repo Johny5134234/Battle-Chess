@@ -19,12 +19,12 @@ const outgoingAnimation = (dir) => [
 	},
 	{
 		opacity: 0,
-		transformX: `translateX(${150 * -dir}%)`,
+		transform: `translateX(${100 * -dir}%)`,
 	},
 ];
 
 const incomingAnimation = (dir) => [
-	{ opacity: 0, transform: `translateX(${150 * dir}%)` },
+	{ opacity: 0, transform: `translateX(${100 * dir}%)` },
 	{ opacity: 1 },
 ];
 

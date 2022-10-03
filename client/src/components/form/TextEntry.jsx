@@ -28,7 +28,6 @@ const useStylesText = createUseStyles((props) => ({
 		left: 10,
 		transform: "translateY(-50%)",
 		color: `${props.primaryColor || ColorType.TEXT}`,
-		opacity: 0.8,
 		transition: "font-size 0.5s, transform 0.5s, top 0.5s",
 	},
 	labelHidden: {
@@ -39,8 +38,8 @@ const useStylesText = createUseStyles((props) => ({
 	textEntry: {
 		width: "100%",
 		height: 85,
-		fontSize: "3.3rem",
-		fontFamily: "Lato, sans-serif",
+		fontSize: "3.2rem",
+		fontFamily: "Oswald, sans-serif",
 		color: `${props.primaryColor || ColorType.TEXT}`,
 		border: [[2, "solid", `${props.primaryColor || ColorType.TEXT}`]],
 		borderRadius: 5,
