@@ -87,6 +87,7 @@ const Navigator = (props) => {
 
 	function switchPage(pageId, currentContext) {
 		if (currentContext.currentPage.pageId === pageId) return;
+		if (currentContext.currentPage && currentContext.transitionPage) return;
 
 		animationDirection = currentContext.trail.some(
 			(trailPage) => trailPage.pageId === pageId

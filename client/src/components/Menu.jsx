@@ -3,10 +3,10 @@ import { createUseStyles } from "react-jss";
 import Button from "./form/Button";
 import TextEntry from "./form/TextEntry";
 import Title from "./Title";
-import { loginAxiosInstance } from "./App";
 import Navigator from "./navigation/Navigator";
 import NavigatorPage from "./navigation/NavigatorPage";
 import { ChessIconType, ColorType } from "../util/Util";
+import LogIn from "./form/Login";
 
 const useStyles = createUseStyles({
 	menu: {
@@ -42,15 +42,6 @@ const useStyles = createUseStyles({
 const Menu = () => {
 	const classes = useStyles();
 
-	function handleSubmitLogin(e) {
-		e.preventDefault();
-		let form = e.target;
-		loginAxiosInstance.post("/login", {
-			email: form.childNodes[0].childNodes[0].childNodes[1].value,
-			password: form.childNodes[1].childNodes[0].childNodes[1].value,
-		});
-	}
-
 	return (
 		<div className={classes.menu}>
 			<Title>BATTLE CHESS</Title>
@@ -81,25 +72,7 @@ const Menu = () => {
 				</NavigatorPage>
 				<NavigatorPage pageId="join-game" owner="play"></NavigatorPage>
 				<NavigatorPage pageId="login" owner="home">
-					<form className={classes.form} onSubmit={handleSubmitLogin}>
-						<TextEntry label="email" width="100%"></TextEntry>
-						<TextEntry
-							label="password"
-							width="100%"
-							password
-						></TextEntry>
-						<div className={classes.row}>
-							<Button width="50%">Log In</Button>
-							<Button
-								width="50%"
-								primaryColor={ColorType.BLUE}
-								secondaryColor={ColorType.WHITE}
-								navTo="signup"
-							>
-								Sign Up
-							</Button>
-						</div>
-					</form>
+					<LogIn />
 				</NavigatorPage>
 				<NavigatorPage pageId="signup" owner="home">
 					<form className={classes.form}>

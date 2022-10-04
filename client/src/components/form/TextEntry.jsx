@@ -188,7 +188,7 @@ const Conditions = (props) => {
 						: classes.conditionList
 				}
 			>
-				{props.conditions.map((condition) => (
+				{props.conditions.map((condition, index) => (
 					<li
 						className={
 							condition.met
@@ -197,6 +197,7 @@ const Conditions = (props) => {
 								  " " +
 								  classes.conditionError
 						}
+						key={index}
 					>
 						<CheckIcon
 							checked={condition.met}

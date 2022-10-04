@@ -122,92 +122,47 @@ const Button = (props) => {
 	}
 
 	if (props.toggable) {
-		if (props.submit) {
-			return (
-				<button
-					onMouseEnter={handleMouseEnter}
-					onMouseLeave={handleMouseLeave}
-					className={classes.buttonContainer}
-					onClick={handleClick}
+		return (
+			<button
+				onMouseEnter={handleMouseEnter}
+				onMouseLeave={handleMouseLeave}
+				onClick={handleClick}
+				className={classes.buttonContainer}
+				type={props.submit ? "submit" : "button"}
+			>
+				<div
+					className={
+						hovering || toggled
+							? classes.button + " " + classes.hoveredButton
+							: classes.button
+					}
 				>
+					<p>{props.children}</p>
+					<ChessIcon className={classes.icon} type={props.type} />
+					<div className={classes.checkBox} />
+				</div>
+				<div className={classes.button + " " + classes.buttonDark}>
+					<p>{props.children}</p>
+					<ChessIcon
+						className={
+							toggled
+								? classes.icon + " " + classes.iconLeft
+								: classes.icon
+						}
+						type={props.type}
+					/>
 					<div
 						className={
-							hovering || toggled
-								? classes.button + " " + classes.hoveredButton
-								: classes.button
+							toggled || hovering
+								? classes.checkBox +
+								  " " +
+								  classes.checkedCheckBox
+								: classes.checkBox
 						}
-					>
-						<p>{props.children}</p>
-						<ChessIcon
-							className={classes.icon}
-							type={props.type || ChessIconType.ROOK}
-						/>
-						<div className={classes.checkBox} />
-					</div>
-					<div className={classes.button + " " + classes.buttonDark}>
-						<p>{props.children}</p>
-						<ChessIcon
-							className={
-								toggled
-									? classes.icon + " " + classes.iconLeft
-									: classes.icon
-							}
-							type={props.type}
-						/>
-						<div
-							className={
-								toggled || hovering
-									? classes.checkBox +
-									  " " +
-									  classes.checkedCheckBox
-									: classes.checkBox
-							}
-						/>
-					</div>
-				</button>
-			);
-		} else {
-			return (
-				<button
-					onMouseEnter={handleMouseEnter}
-					onMouseLeave={handleMouseLeave}
-					onClick={handleClick}
-					className={classes.buttonContainer}
-				>
-					<div
-						className={
-							hovering || toggled
-								? classes.button + " " + classes.hoveredButton
-								: classes.button
-						}
-					>
-						<p>{props.children}</p>
-						<ChessIcon className={classes.icon} type={props.type} />
-						<div className={classes.checkBox} />
-					</div>
-					<div className={classes.button + " " + classes.buttonDark}>
-						<p>{props.children}</p>
-						<ChessIcon
-							className={
-								toggled
-									? classes.icon + " " + classes.iconLeft
-									: classes.icon
-							}
-							type={props.type}
-						/>
-						<div
-							className={
-								toggled || hovering
-									? classes.checkBox +
-									  " " +
-									  classes.checkedCheckBox
-									: classes.checkBox
-							}
-						/>
-					</div>
-				</button>
-			);
-		}
+					/>
+				</div>
+			</button>
+		);
 	} else {
 		return (
 			<button
@@ -215,6 +170,7 @@ const Button = (props) => {
 				onMouseLeave={handleMouseLeave}
 				className={classes.buttonContainer}
 				onClick={handleClick}
+				type={props.submit ? "submit" : "button"}
 			>
 				<div
 					className={
@@ -231,7 +187,7 @@ const Button = (props) => {
 			</button>
 		);
 	}
-	};
+};
 
 Button.defaultProps = defaultProps;
 export default Button;

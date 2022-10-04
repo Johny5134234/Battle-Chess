@@ -8,14 +8,11 @@ const server = http.createServer(app);
 app.use(
 	cors({
 		origin: "http://localhost:8080",
+		credentials: true,
 	})
 );
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
-app.get("/", (req, res) => {
-	res.send("Hello world!");
-});
 
 app.post("/login", (req, res) => {
 	console.log(req.body);
