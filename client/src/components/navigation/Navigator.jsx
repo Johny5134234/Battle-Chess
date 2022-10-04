@@ -31,7 +31,7 @@ const incomingAnimation = (dir) => [
 const animationOptions = {
 	duration: 200,
 	fill: "both",
-	easing: "ease-in-out",
+	easing: "ease-in",
 };
 
 const useStyles = createUseStyles({

@@ -1,9 +1,12 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const app = express();
 const http = require("http");
 const cors = require("cors");
+const init = require("./GameManager");
+
+const app = express();
 const server = http.createServer(app);
+init();
 
 app.use(
 	cors({

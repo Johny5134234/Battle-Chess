@@ -63,8 +63,9 @@ const LogIn = () => {
 				</Button>
 				<Button
 					width="50%"
-					primaryColor={ColorType.BLUE}
-					secondaryColor={ColorType.WHITE}
+					fillColor={ColorType.BLUE}
+					textColor={ColorType.WHITE}
+					borderColor={ColorType.BLUE}
 					navTo="signup"
 				>
 					Sign Up

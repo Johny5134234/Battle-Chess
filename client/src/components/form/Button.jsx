@@ -8,8 +8,9 @@ import NavContext from "../navigation/NavContext";
 const defaultProps = {
 	toggable: false,
 	submit: false,
-	primaryColor: ColorType.WHITE,
-	secondaryColor: ColorType.TEXT,
+	fillColor: ColorType.WHITE,
+	textColor: ColorType.TEXT,
+	borderColor: ColorType.TEXT,
 	width: "100%",
 	onClick: empty,
 	type: ChessIconType.ROOK,
@@ -20,12 +21,9 @@ const useStyles = createUseStyles({
 		width: "100%",
 		height: 85,
 		borderRadius: 5,
-		// @ts-ignore
-		border: [[2, "solid", `${props.secondaryColor}`]],
-		// @ts-ignore
-		backgroundColor: `${props.primaryColor}`,
-		// @ts-ignore
-		color: `${props.secondaryColor}`,
+		border: [[2, "solid", `${props.borderColor}`]],
+		backgroundColor: `${props.fillColor}`,
+		color: `${props.textColor}`,
 		display: "flex",
 		alignItems: "center",
 		justifyContent: "center",
@@ -42,12 +40,9 @@ const useStyles = createUseStyles({
 		},
 	}),
 	buttonDark: (props) => ({
-		// @ts-ignore
-		border: [[2, "solid", `${props.primaryColor}`]],
-		// @ts-ignore
-		backgroundColor: `${props.secondaryColor}`,
-		// @ts-ignore
-		color: `${props.primaryColor}`,
+		border: [[2, "solid", `${props.borderColor}`]],
+		backgroundColor: `${props.textColor}`,
+		color: `${props.fillColor}`,
 		zIndex: 1,
 	}),
 	hoveredButton: {
@@ -66,7 +61,6 @@ const useStyles = createUseStyles({
 		right: "calc(100% - 20px - 45px - 2px)",
 	},
 	buttonContainer: {
-		// @ts-ignore
 		width: (props) => props.width,
 		height: 85,
 		position: "relative",
@@ -81,17 +75,13 @@ const useStyles = createUseStyles({
 		transform: "translateY(-50%)",
 		zIndex: 1,
 		borderRadius: 5,
-		// @ts-ignore
-		border: [[2, "solid", `${props.secondaryColor}`]],
-		// @ts-ignore
-		backgroundColor: `${props.primaryColor}`,
+		border: [[2, "solid", `${props.textColor}`]],
+		backgroundColor: `${props.fillColor}`,
 		transition: "border-color 0.6s, background-color 0.6s",
 	}),
 	checkedCheckBox: (props) => ({
-		// @ts-ignore
-		borderColor: `${props.primaryColor}`,
-		// @ts-ignore
-		backgroundColor: `${props.secondaryColor}`,
+		borderColor: `${props.textColor}`,
+		backgroundColor: `${props.fillColor}`,
 	}),
 });
 

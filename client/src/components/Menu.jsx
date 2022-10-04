@@ -7,6 +7,7 @@ import Navigator from "./navigation/Navigator";
 import NavigatorPage from "./navigation/NavigatorPage";
 import { ChessIconType, ColorType } from "../util/Util";
 import LogIn from "./form/Login";
+import socket from "../api/socket";
 
 const useStyles = createUseStyles({
 	menu: {
@@ -42,6 +43,30 @@ const useStyles = createUseStyles({
 const Menu = () => {
 	const classes = useStyles();
 
+	function requestHost(e) {
+		e.preventDefault();
+		const roomId = e.target.childNodes[0].childNodes[0].childNodes[1].value;
+		socket.emit("request-host", roomId);
+	}
+
+	function requestJoin(e) {
+		e.preventDefault();
+		const roomId = e.target.childNodes[0].childNodes[0].childNodes[1].value;
+		socket.emit("request-join", roomId);
+	}
+
+	socket.on("join-game", () => {
+		console.log(socket.rooms);
+	});
+
+	socket.on("host-fail", () => {
+		console.log("room id in use!");
+	});
+
+	socket.on("join-fail", (inRoom) => {
+		console.log(inRoom ? "already in room!" : "no such room exists!");
+	});
+
 	return (
 		<div className={classes.menu}>
 			<Title>BATTLE CHESS</Title>
@@ -55,22 +80,31 @@ const Menu = () => {
 						<Button
 							navTo="signup"
 							width="45%"
-							primaryColor={ColorType.BLUE}
-							secondaryColor={ColorType.WHITE}
+							fillColor={ColorType.BLUE}
+							textColor={ColorType.WHITE}
+							borderColor={ColorType.BLUE}
 						>
 							Sign Up
 						</Button>
 					</div>
 				</NavigatorPage>
-				<NavigatorPage pageId="host" owner="play">
-					<Button>Host Now</Button>
-				</NavigatorPage>
 				<NavigatorPage pageId="play" owner="home">
-					<Button toggable>Find Game</Button>
+					<Button>Find Game</Button>
 					<Button navTo="join-game">Join Game</Button>
-					<Button navTo="host">Host Game</Button>
+					<Button navTo="host-game">Host Game</Button>
 				</NavigatorPage>
-				<NavigatorPage pageId="join-game" owner="play"></NavigatorPage>
+				<NavigatorPage pageId="join-game" owner="play">
+					<form className={classes.form} onSubmit={requestJoin}>
+						<TextEntry label="room id"></TextEntry>
+						<Button submit>Join</Button>
+					</form>
+				</NavigatorPage>
+				<NavigatorPage pageId="host-game" owner="play">
+					<form className={classes.form} onSubmit={requestHost}>
+						<TextEntry label="room id"></TextEntry>
+						<Button submit>Host</Button>
+					</form>
+				</NavigatorPage>
 				<NavigatorPage pageId="login" owner="home">
 					<LogIn />
 				</NavigatorPage>
@@ -94,8 +128,9 @@ const Menu = () => {
 							</Button>
 							<Button
 								width="50%"
-								primaryColor={ColorType.BLUE}
-								secondaryColor={ColorType.WHITE}
+								fillColor={ColorType.BLUE}
+								textColor={ColorType.WHITE}
+								borderColor={ColorType.BLUE}
 							>
 								Sign Up
 							</Button>
