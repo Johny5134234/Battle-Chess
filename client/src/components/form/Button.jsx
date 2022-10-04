@@ -231,7 +231,7 @@ const Button = (props) => {
 			</button>
 		);
 	}
-};
+	};
 
 Button.defaultProps = defaultProps;
 export default Button;
