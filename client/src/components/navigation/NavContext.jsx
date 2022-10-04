@@ -8,7 +8,6 @@ export const defaultNavContext = {
 	trail: [{ pageId: "home", owner: "none" }],
 	backPage: empty,
 	setPage: empty,
-	transitioning: false,
 };
 
 const NavContext = React.createContext(defaultNavContext);

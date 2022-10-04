@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { createUseStyles } from "react-jss";
 import Button from "./form/Button";
 import TextEntry from "./form/TextEntry";
@@ -8,6 +8,7 @@ import NavigatorPage from "./navigation/NavigatorPage";
 import { ChessIconType, ColorType } from "../util/Util";
 import LogIn from "./form/Login";
 import socket from "../api/socket";
+import { AppContext } from "./application-state/StateContext";
 
 const useStyles = createUseStyles({
 	menu: {
@@ -42,6 +43,7 @@ const useStyles = createUseStyles({
 
 const Menu = () => {
 	const classes = useStyles();
+	const appContext = useContext(AppContext);
 
 	function requestHost(e) {
 		e.preventDefault();
@@ -56,7 +58,8 @@ const Menu = () => {
 	}
 
 	socket.on("join-game", () => {
-		console.log(socket.rooms);
+		console.log("joining");
+		appContext.setMode("game");
 	});
 
 	socket.on("host-fail", () => {

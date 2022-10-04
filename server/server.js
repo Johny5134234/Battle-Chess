@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const http = require("http");
 const cors = require("cors");
-const init = require("./GameManager");
+const init = require("./game/game-socket");
 
 const app = express();
 const server = http.createServer(app);
