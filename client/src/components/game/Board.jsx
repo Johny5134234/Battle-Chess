@@ -1,9 +1,10 @@
 import React, { useRef, useEffect, useState } from "react";
 import { createUseStyles } from "react-jss";
+import socket from "../../api/socket";
 
 const boardDimensions = 500;
 const squareSize = boardDimensions / 8;
-const whiteSquare = "#FCFCFC";
+const whiteSquare = "#d9d9d9";
 const blackSquare = "#515963";
 
 const defaultStart = [
@@ -22,7 +23,7 @@ const defaultStart = [
 	{ pieceId: "w-b-0", piecePos: "C1", moves: [] },
 	{ pieceId: "w-b-1", piecePos: "F1", moves: [] },
 	{ pieceId: "w-q-0", piecePos: "D1", moves: [] },
-	{ pieceId: "w-k-0", piecePos: "A1", moves: [] },
+	{ pieceId: "w-k-0", piecePos: "E1", moves: [] },
 	{ pieceId: "b-p-0", piecePos: "A7", moves: ["A6", "A5"] },
 	{ pieceId: "b-p-1", piecePos: "B7", moves: ["B6", "B5"] },
 	{ pieceId: "b-p-2", piecePos: "C7", moves: ["C6", "C5"] },
@@ -38,34 +39,110 @@ const defaultStart = [
 	{ pieceId: "b-b-0", piecePos: "C8", moves: [] },
 	{ pieceId: "b-b-1", piecePos: "F8", moves: [] },
 	{ pieceId: "b-q-0", piecePos: "D8", moves: [] },
-	{ pieceId: "b-k-0", piecePos: "A8", moves: [] },
+	{ pieceId: "b-k-0", piecePos: "E8", moves: [] },
 ];
 
 const useStyles = createUseStyles({
 	boardContainer: {
-		display: "flex",
-		alignItems: "center",
-		justifyContent: "center",
+		display: "grid",
+		gridTemplateRows: `${squareSize}px ${boardDimensions}px ${squareSize}px`,
+		gridTemplateColumns: `${squareSize}px ${boardDimensions}px ${squareSize}px`,
+		gridTemplateAreas: `". tcol ."
+			"lrow board rrow"
+			". bcol ."`,
 		width: "100vw",
 		height: "100vh",
-		flexBasis: "none",
+		justifyContent: "center",
+		alignContent: "center",
+	},
+	board: {
+		gridArea: "board",
+	},
+	row: {
+		display: "flex",
+		flexDirection: "column",
+	},
+	col: {
+		display: "flex",
+	},
+	lrow: {
+		gridArea: "lrow",
+	},
+	rrow: {
+		gridArea: "rrow",
+	},
+	tcol: {
+		gridArea: "tcol",
+	},
+	bcol: {
+		gridArea: "bcol",
+	},
+	labelContainer: {
+		height: squareSize,
+		width: squareSize,
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	squareLabel: {
+		margin: 0,
+		textAlign: "center",
+		height: "fit-content",
 	},
 });
 
 const Board = () => {
 	const boardRef = useRef(null);
 	const [shadowPieces, setShadowPieces] = useState(new Set(defaultStart));
+	const [color, setColor] = useState("");
+	const [gameStarted, setGameStarted] = useState(false);
 	const classes = useStyles();
+
+	socket.on("start-game", (color) => {
+		console.log(`started ${color} game!`);
+		setColor(color);
+		setGameStarted(true);
+	});
 
 	useEffect(() => {
 		const canvas = boardRef.current;
 		const context = canvas.getContext("2d");
 		context.translate(0.5, 0.5);
+		drawBoard(context);
+		if (color != "") {
+			drawPieces(context);
+		}
+	}, [color, gameStarted]);
+
+	function drawPieces(ctx) {
+		for (let piece of shadowPieces) {
+			let pieceData = getPropertiesFromId(piece.pieceId);
+			let pieceCoords = boardCoordsToPixel(piece.piecePos, color);
+			console.log(pieceData);
+			drawSvg(
+				pieceData[1],
+				pieceData[0],
+				pieceCoords[0],
+				pieceCoords[1],
+				ctx
+			);
+		}
+	}
+
+	function drawSvg(svg, color, x, y, ctx) {
+		let img = new Image(squareSize, squareSize);
+		img.src = `icons/${color}/${svg}.svg`;
+		img.onload = () => {
+			ctx.drawImage(img, x, y, squareSize, squareSize);
+		};
+	}
+
+	function drawBoard(ctx) {
 		let squareColor = whiteSquare;
 		for (let row = 0; row < 8; row++) {
 			for (let col = 0; col < 8; col++) {
-				context.fillStyle = squareColor;
-				context.fillRect(
+				ctx.fillStyle = squareColor;
+				ctx.fillRect(
 					col * squareSize,
 					row * squareSize,
 					squareSize,
@@ -77,25 +154,204 @@ const Board = () => {
 			squareColor =
 				squareColor === whiteSquare ? blackSquare : whiteSquare;
 		}
-	}, []);
+	}
 
 	function handleClick(e) {}
 
-	return (
-		<div className={classes.boardContainer}>
-			<canvas
-				ref={boardRef}
-				id="boardCanvas"
-				width={boardDimensions}
-				height={boardDimensions}
-				onMouseDown={handleClick}
-			></canvas>
-		</div>
-	);
+	if (!gameStarted) {
+		return (
+			<div className={classes.boardContainer}>
+				<canvas
+					className={classes.board}
+					ref={boardRef}
+					id="boardCanvas"
+					width={boardDimensions}
+					height={boardDimensions}
+					onMouseDown={handleClick}
+				></canvas>
+			</div>
+		);
+	} else {
+		if (color === "white") {
+			return (
+				<div className={classes.boardContainer}>
+					<div className={classes.row + " " + classes.lrow}>
+						{[1, 2, 3, 4, 5, 6, 7, 8].map((value) => (
+							<div className={classes.labelContainer} key={value}>
+								<p className={classes.squareLabel}>{value}</p>
+							</div>
+						))}
+					</div>
+					<div className={classes.col + " " + classes.tcol}>
+						{["A", "B", "C", "D", "E", "F", "G", "H"].map(
+							(value) => (
+								<div
+									className={classes.labelContainer}
+									key={value}
+								>
+									<p className={classes.squareLabel}>
+										{value}
+									</p>
+								</div>
+							)
+						)}
+					</div>
+					<canvas
+						className={classes.board}
+						ref={boardRef}
+						id="boardCanvas"
+						width={boardDimensions}
+						height={boardDimensions}
+						onMouseDown={handleClick}
+					></canvas>
+					<div className={classes.col + " " + classes.bcol}>
+						{["A", "B", "C", "D", "E", "F", "G", "H"].map(
+							(value) => (
+								<div
+									className={classes.labelContainer}
+									key={value}
+								>
+									<p className={classes.squareLabel}>
+										{value}
+									</p>
+								</div>
+							)
+						)}
+					</div>
+					<div className={classes.row + " " + classes.rrow}>
+						{[1, 2, 3, 4, 5, 6, 7, 8].reverse().map((value) => (
+							<div className={classes.labelContainer} key={value}>
+								<p className={classes.squareLabel}>{value}</p>
+							</div>
+						))}
+					</div>
+				</div>
+			);
+		} else {
+			return (
+				<div className={classes.boardContainer}>
+					<div className={classes.row + " " + classes.lrow}>
+						{[1, 2, 3, 4, 5, 6, 7, 8].reverse().map((value) => (
+							<div className={classes.labelContainer} key={value}>
+								<p className={classes.squareLabel}>{value}</p>
+							</div>
+						))}
+					</div>
+					<div className={classes.col + " " + classes.tcol}>
+						{["A", "B", "C", "D", "E", "F", "G", "H"].map(
+							(value) => (
+								<div
+									className={classes.labelContainer}
+									key={value}
+								>
+									<p className={classes.squareLabel}>
+										{value}
+									</p>
+								</div>
+							)
+						)}
+					</div>
+					<canvas
+						className={classes.board}
+						ref={boardRef}
+						id="boardCanvas"
+						width={boardDimensions}
+						height={boardDimensions}
+						onMouseDown={handleClick}
+					></canvas>
+					<div className={classes.col + " " + classes.bcol}>
+						{["A", "B", "C", "D", "E", "F", "G", "H"].map(
+							(value) => (
+								<div
+									className={classes.labelContainer}
+									key={value}
+								>
+									<p className={classes.squareLabel}>
+										{value}
+									</p>
+								</div>
+							)
+						)}
+					</div>
+					<div className={classes.row + " " + classes.rrow}>
+						{[1, 2, 3, 4, 5, 6, 7, 8].reverse().map((value) => (
+							<div className={classes.labelContainer} key={value}>
+								<p className={classes.squareLabel}>{value}</p>
+							</div>
+						))}
+					</div>
+				</div>
+			);
+		}
+	}
 };
 
-function boardCoordsToRowCol(coordCode) {
-	let row = null;
+function boardCoordsToPixel(coordCode, color) {
+	return rowColToPixel(boardCoordsToRowCol(coordCode, color));
+}
+
+function boardCoordsToRowCol(coordCode, color) {
+	let row, col;
+	if (color == "white") {
+		row = coordCode[1] - 1;
+	} else {
+		row = 8 - coordCode[1];
+	}
+	switch (coordCode[0]) {
+		case "A":
+			col = 0;
+			break;
+		case "B":
+			col = 1;
+			break;
+		case "C":
+			col = 2;
+			break;
+		case "D":
+			col = 3;
+			break;
+		case "E":
+			col = 4;
+			break;
+		case "F":
+			col = 5;
+			break;
+		case "G":
+			col = 6;
+			break;
+		case "H":
+			col = 7;
+			break;
+	}
+	return [row, col];
+}
+
+function rowColToPixel(coords) {
+	return [coords[1] * squareSize, coords[0] * squareSize];
+}
+
+function getPropertiesFromId(pieceId) {
+	let properties = pieceId.split("-");
+	properties[0] = properties[0] === "w" ? "white" : "black";
+	properties[1] = expandPieceType(properties[1]);
+	return properties;
+}
+
+function expandPieceType(pieceType) {
+	switch (pieceType) {
+		case "p":
+			return "pawn";
+		case "r":
+			return "rook";
+		case "kn":
+			return "knight";
+		case "b":
+			return "bishop";
+		case "q":
+			return "queen";
+		case "k":
+			return "king";
+	}
 }
 
 export default Board;

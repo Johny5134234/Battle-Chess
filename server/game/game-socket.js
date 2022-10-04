@@ -13,7 +13,6 @@ const init = () => {
 	});
 
 	io.on("connection", (socket) => {
-		console.log("Player: " + socket.id);
 		socket.on("request-host", (roomId) => {
 			if (!io.sockets.adapter.rooms.has(roomId)) {
 				joinRoom(socket, roomId);
@@ -38,7 +37,7 @@ const init = () => {
 	});
 };
 
-function joinRoom(socket, roomId) {
+async function joinRoom(socket, roomId) {
 	let connectedPlayers = io.sockets.adapter.rooms.get(roomId);
 	if (connectedPlayers?.size === 2) return false; // might want to add spectator stuff here
 
@@ -47,9 +46,9 @@ function joinRoom(socket, roomId) {
 			socket.leave(room);
 		});
 	}
-	socket.join(roomId);
+	await socket.join(roomId);
 	if (connectedPlayers?.size === 2) {
-		const server = new GameServer(connectedPlayers);
+		const server = new GameServer(roomId, io);
 	}
 	return true;
 }

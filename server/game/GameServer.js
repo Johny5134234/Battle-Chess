@@ -1,12 +1,16 @@
 class GameServer {
-	constructor(sockets) {
-		this.sockets = sockets;
-		let playerCopy = new Set(sockets).values();
-		this.white = playerCopy.next().value;
-		this.black = playerCopy.next().value;
-		console.log("started server!");
-		console.log("WHITE: " + this.white);
-		console.log("BLACK: " + this.black);
+	constructor(roomId, io) {
+		this.roomId = roomId;
+		this.io = io;
+		this.initPlayers();
+	}
+
+	async initPlayers() {
+		let sockets = await this.io.in(this.roomId).fetchSockets();
+		this.white = sockets[0];
+		this.black = sockets[1];
+		this.white.emit("start-game", "white");
+		this.black.emit("start-game", "black");
 	}
 }
 
