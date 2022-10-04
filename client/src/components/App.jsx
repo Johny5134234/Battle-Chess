@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import Menu from "./Menu";
 import AppNavigator, { Mode } from "./application-state/StateContext";
+import Board from "./game/Board";
 
 function App() {
 	return (
@@ -11,7 +12,7 @@ function App() {
 					<Menu></Menu>
 				</Mode>
 				<Mode modeId="game">
-					<h1>CHESS!</h1>
+					<Board></Board>
 				</Mode>
 			</AppNavigator>
 		</div>

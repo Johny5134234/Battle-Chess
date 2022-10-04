@@ -58,8 +58,7 @@ const Menu = () => {
 	}
 
 	socket.on("join-game", () => {
-		console.log("joining");
-		appContext.setMode("game");
+		appContext.setMode("game", "north");
 	});
 
 	socket.on("host-fail", () => {

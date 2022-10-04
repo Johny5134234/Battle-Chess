@@ -36,7 +36,7 @@ function calculateAnimationDirection(direction) {
 }
 
 const animationOptions = {
-	duration: 2000,
+	duration: 400,
 	fill: "both",
 	easing: "ease-in",
 };
@@ -76,7 +76,6 @@ const AppNavigator = (props) => {
 	function switchMode(modeId, direction = "north") {
 		if (context.currentMode === modeId) return;
 		if (context.currentMode && context.transitionMode) return;
-		console.log("mode switched");
 
 		let animationDirection = calculateAnimationDirection(direction);
 

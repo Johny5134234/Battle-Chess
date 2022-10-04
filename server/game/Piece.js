@@ -26,7 +26,7 @@ class Piece {
 const PieceType = {
   PAWN: "p",
   ROOK: "r",
-  KNIGHT: "k",
+  KNIGHT: "kn",
   BISHOP: "b",
   QUEEN: "q",
   KING: "k"
