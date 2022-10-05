@@ -9,9 +9,11 @@ const init = () => {
 		serveClient: false,
 		cors: {
 			origin: [
+				"https://johny5134234.github.io/Battle-Chess",
 				"http://localhost:8080",
-				"https://github.com/Johny5134234/Battle-Chess",
 			],
+			methods: ["GET", "POST"],
+			credentials: true,
 		},
 	});
 

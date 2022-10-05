@@ -28,7 +28,7 @@ const useStylesText = createUseStyles((props) => ({
 		left: 10,
 		transform: "translateY(-50%)",
 		color: `${props.primaryColor || ColorType.TEXT}`,
-		transition: "font-size 0.5s, transform 0.5s, top 0.5s",
+		transition: "font-size 0.5s, transform 0.5s, top 0.5s, color 0.5s",
 	},
 	labelHidden: {
 		fontSize: "1.6rem",
@@ -45,7 +45,10 @@ const useStylesText = createUseStyles((props) => ({
 		borderRadius: 5,
 		backgroundColor: `${props.secondaryColor || ColorType.WHITE}`,
 		padding: 10,
-		transition: [["border ", "0.5s"]],
+		transition: [
+			["border", "0.5s"],
+			["color", "0.5s"],
+		],
 		"&:focus": {
 			outline: "none",
 		},
