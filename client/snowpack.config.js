@@ -17,7 +17,10 @@ module.exports = {
 		/* ... */
 	},
 	buildOptions: {
-		out: 'docs',
-		metaUrlPath: 'snowpack'
+		out: "docs",
+		metaUrlPath: "snowpack",
+	},
+	optimize: {
+		bundle: true,
 	},
 };
