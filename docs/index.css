@@ -1,6 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Staatliches&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap');
+@import "https://fonts.googleapis.com/css2?family=Staatliches&display=swap";
+@import "https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap";
 
+/* docs/index.css */
 :root {
   font-size: 16px;
   --light-blue: #96D6FA;
@@ -11,11 +12,9 @@
   --text: #1d1f22;
   --light-text: #515963;
 }
-
 * {
   box-sizing: border-box;
 }
-
 body {
   font-family: "Staatliches", sans-serif;
   margin: 0;
@@ -24,22 +23,21 @@ body {
   width: 100vw;
   height: 100vh;
 }
-
-button, input[type="submit"], input[type="reset"] {
-	background: none;
-	color: inherit;
-	border: none;
-	padding: 0;
-	font: inherit;
-	cursor: pointer;
-	outline: inherit;
+button,
+input[type=submit],
+input[type=reset] {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
 }
-
 .App {
   width: 100vw;
   height: 100vh;
 }
-
 svg {
   fill: currentColor !important;
 }
