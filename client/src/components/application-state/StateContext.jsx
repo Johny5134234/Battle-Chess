@@ -4,7 +4,6 @@ import { empty } from "../../util/Util";
 const defaultState = {
 	currentMode: "menu",
 	transitionMode: null,
-	transitionDirection: "north",
 	setMode: empty,
 };
 
@@ -73,11 +72,9 @@ const AppNavigator = (props) => {
 		});
 	}, []);
 
-	function switchMode(modeId, direction = "north") {
+	function switchMode(modeId) {
 		if (context.currentMode === modeId) return;
 		if (context.currentMode && context.transitionMode) return;
-
-		let animationDirection = calculateAnimationDirection(direction);
 
 		updateContext({
 			transitionMode: modeId,

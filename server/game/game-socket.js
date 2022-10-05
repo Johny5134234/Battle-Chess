@@ -13,22 +13,24 @@ const init = () => {
 	});
 
 	io.on("connection", (socket) => {
-		socket.on("request-host", (roomId) => {
+		console.log("connection");
+		socket.on("request-host", async (roomId) => {
 			if (!io.sockets.adapter.rooms.has(roomId)) {
-				joinRoom(socket, roomId);
-				socket.emit("join-game");
+				let joined = await joinRoom(socket, roomId);
+				if (joined) socket.emit("join-game");
 			} else {
 				socket.emit("host-fail");
 			}
 		});
 
-		socket.on("request-join", (roomId) => {
+		socket.on("request-join", async (roomId) => {
 			if (io.sockets.adapter.rooms.has(roomId)) {
 				// check for if socket is already in room? idk, sounds kinda bullshit
 				if (false) {
 					socket.emit("join-fail", true);
 				} else {
-					if (joinRoom(socket, roomId)) socket.emit("join-game");
+					let joined = await joinRoom(socket, roomId);
+					if (joined) socket.emit("join-game");
 				}
 			} else {
 				socket.emit("join-fail", false);
@@ -48,7 +50,13 @@ async function joinRoom(socket, roomId) {
 	}
 	await socket.join(roomId);
 	if (connectedPlayers?.size === 2) {
-		const server = new GameServer(roomId, io);
+		if (GameServer.activeRooms) {
+			if (!Object.keys(GameServer.activeRooms).includes(roomId)) {
+				new GameServer(roomId, io);
+			}
+		} else {
+			new GameServer(roomId, io);
+		}
 	}
 	return true;
 }

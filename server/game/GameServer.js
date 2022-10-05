@@ -37,11 +37,14 @@ const defaultPieces = {
 };
 
 class GameServer {
+	static activeRooms = {};
+
 	constructor(roomId, io) {
 		this.roomId = roomId;
 		this.io = io;
 		this.pieces = defaultPieces;
 		this.init();
+		GameServer.activeRooms[roomId] = this;
 	}
 
 	async init() {

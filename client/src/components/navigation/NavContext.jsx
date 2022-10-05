@@ -2,13 +2,10 @@ import React from "react";
 import { empty } from "../../util/Util";
 
 export const defaultNavContext = {
-	currentPage: { pageId: "play", owner: "home" },
+	currentPage: { pageId: "home", owner: "none" },
 	transitionPage: null,
 	pages: [{ pageId: "home", owner: "none" }],
-	trail: [
-		{ pageId: "home", owner: "none" },
-		{ pageId: "play", owner: "home" },
-	],
+	trail: [{ pageId: "home", owner: "none" }],
 	backPage: empty,
 	setPage: empty,
 };
