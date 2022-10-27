@@ -9,38 +9,38 @@ const whiteSquare = "#d9d9d9";
 const blackSquare = "#515963";
 
 const defaultStart = {
-	"w-p-0": { piecePos: "A2", moves: ["A3", "A4"] },
-	"w-p-1": { piecePos: "B2", moves: ["B3", "B4"] },
-	"w-p-2": { piecePos: "C2", moves: ["C3", "C4"] },
-	"w-p-3": { piecePos: "D2", moves: ["D3", "D4"] },
-	"w-p-4": { piecePos: "E2", moves: ["E3", "E4"] },
-	"w-p-5": { piecePos: "F2", moves: ["F3", "F4"] },
-	"w-p-6": { piecePos: "G2", moves: ["G3", "G4"] },
-	"w-p-7": { piecePos: "H2", moves: ["H3", "H4"] },
-	"w-r-0": { piecePos: "A1", moves: [] },
-	"w-r-1": { piecePos: "H1", moves: [] },
-	"w-kn-0": { piecePos: "B1", moves: ["A3", "C3"] },
-	"w-kn-1": { piecePos: "G1", moves: ["F3", "H3"] },
-	"w-b-0": { piecePos: "C1", moves: [] },
-	"w-b-1": { piecePos: "F1", moves: [] },
-	"w-q-0": { piecePos: "D1", moves: [] },
-	"w-k-0": { piecePos: "E1", moves: [] },
-	"b-p-0": { piecePos: "A7", moves: ["A6", "A5"] },
-	"b-p-1": { piecePos: "B7", moves: ["B6", "B5"] },
-	"b-p-2": { piecePos: "C7", moves: ["C6", "C5"] },
-	"b-p-3": { piecePos: "D7", moves: ["D6", "D5"] },
-	"b-p-4": { piecePos: "E7", moves: ["E6", "E5"] },
-	"b-p-5": { piecePos: "F7", moves: ["F6", "F5"] },
-	"b-p-6": { piecePos: "G7", moves: ["G6", "G5"] },
-	"b-p-7": { piecePos: "H7", moves: ["H6", "H5"] },
-	"b-r-0": { piecePos: "A8", moves: [] },
-	"b-r-1": { piecePos: "H8", moves: [] },
-	"b-kn-0": { piecePos: "B8", moves: ["A6", "C6"] },
-	"b-kn-1": { piecePos: "G8", moves: ["F6", "H6"] },
+	"p-w-0": { piecePos: "A2", moves: ["A3", "A4"] },
+	"p-w-1": { piecePos: "B2", moves: ["B3", "B4"] },
+	"p-w-2": { piecePos: "C2", moves: ["C3", "C4"] },
+	"p-w-3": { piecePos: "D2", moves: ["D3", "D4"] },
+	"p-w-4": { piecePos: "E2", moves: ["E3", "E4"] },
+	"p-w-5": { piecePos: "F2", moves: ["F3", "F4"] },
+	"p-w-6": { piecePos: "G2", moves: ["G3", "G4"] },
+	"p-w-7": { piecePos: "H2", moves: ["H3", "H4"] },
+	"r-w-0": { piecePos: "A1", moves: [] },
+	"r-w-1": { piecePos: "H1", moves: [] },
+	"kn-w-0": { piecePos: "B1", moves: ["A3", "C3"] },
+	"kn-w-1": { piecePos: "G1", moves: ["F3", "H3"] },
+	"b-w-0": { piecePos: "C1", moves: [] },
+	"b-w-1": { piecePos: "F1", moves: [] },
+	"q-w-0": { piecePos: "D1", moves: [] },
+	"k-w-0": { piecePos: "E1", moves: [] },
+	"p-b-0": { piecePos: "A7", moves: ["A6", "A5"] },
+	"p-b-1": { piecePos: "B7", moves: ["B6", "B5"] },
+	"p-b-2": { piecePos: "C7", moves: ["C6", "C5"] },
+	"p-b-3": { piecePos: "D7", moves: ["D6", "D5"] },
+	"p-b-4": { piecePos: "E7", moves: ["E6", "E5"] },
+	"p-b-5": { piecePos: "F7", moves: ["F6", "F5"] },
+	"p-b-6": { piecePos: "G7", moves: ["G6", "G5"] },
+	"p-b-7": { piecePos: "H7", moves: ["H6", "H5"] },
+	"r-b-0": { piecePos: "A8", moves: [] },
+	"r-b-1": { piecePos: "H8", moves: [] },
+	"kn-b-0": { piecePos: "B8", moves: ["A6", "C6"] },
+	"kn-b-1": { piecePos: "G8", moves: ["F6", "H6"] },
 	"b-b-0": { piecePos: "C8", moves: [] },
 	"b-b-1": { piecePos: "F8", moves: [] },
-	"b-q-0": { piecePos: "D8", moves: [] },
-	"b-k-0": { piecePos: "E8", moves: [] },
+	"q-b-0": { piecePos: "D8", moves: [] },
+	"k-b-0": { piecePos: "E8", moves: [] },
 };
 
 const useStyles = createUseStyles({
@@ -101,20 +101,21 @@ const Board = () => {
 	const [gameStarted, setGameStarted] = useState(false);
 	const classes = useStyles();
 
-	socket.on("start-game", (color) => {
-		console.log(`started ${color} game!`);
-		setColor(color);
-		setGameStarted(true);
-	});
-
-	socket.on("move-package", (data) => {
-		console.log("move!");
-		setShadowPieces((prev) => {
-			let pieceToChange = prev[data.movedPiece.id];
-			pieceToChange.piecePos = data.movedPiece.newPos;
-			return { ...prev, [data.movedPiece.id]: pieceToChange };
+	useEffect(() => {
+		socket.on("start-game", (color) => {
+			setColor(color);
+			setGameStarted(true);
 		});
-	});
+
+		socket.on("move-package", (data) => {
+			console.log("move!");
+			setShadowPieces((prev) => {
+				let pieceToChange = prev[data.movedPiece.id];
+				pieceToChange.piecePos = data.movedPiece.newPos;
+				return { ...prev, [data.movedPiece.id]: pieceToChange };
+			});
+		});
+	}, []);
 
 	useEffect(() => {
 		const canvas = boardRef.current;
@@ -160,7 +161,7 @@ const Board = () => {
 		} else {
 			let img = new Image(squareSize, squareSize);
 			let pieceData = getPropertiesFromId(pieceId);
-			img.src = `icons/${pieceData[0]}/${pieceData[1]}.svg`;
+			img.src = `icons/${pieceData[1]}/${pieceData[0]}.svg`;
 			setImages((prev) => {
 				return {
 					...prev,
@@ -222,7 +223,7 @@ const Board = () => {
 			}
 		} else {
 			let pieceData = getPropertiesFromId(pieceId);
-			if (pieceData[0] != color) {
+			if (pieceData[1] != color) {
 				setCurrentPiece(null);
 			} else if (currentPiece) {
 				if (_.isEqual({ pieceId, ...selectedPiece }, currentPiece)) {
@@ -454,8 +455,8 @@ function pixelToRowCol(coords) {
 
 function getPropertiesFromId(pieceId) {
 	let properties = pieceId.split("-");
-	properties[0] = properties[0] === "w" ? "white" : "black";
-	properties[1] = expandPieceType(properties[1]);
+	properties[0] = expandPieceType(properties[0]);
+	properties[1] = properties[1] === "w" ? "white" : "black";
 	return properties;
 }
 

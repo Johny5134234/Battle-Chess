@@ -28,6 +28,10 @@ class Piece {
 			pieceColor + "-" + pieceType + "-" + currentPieceCount)();
 		currentPieceCount = currentPieceCount + 1;
 	}
+
+	move(coords) {
+		this.coords = coords;
+	}
 }
 
 module.exports = [Piece, PieceType];

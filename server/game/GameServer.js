@@ -1,4 +1,3 @@
-// BUG: currently, the move-package event is sending too much data
 const [Piece, PieceType] = require("./Piece");
 
 const defaultPieces = {
@@ -48,22 +47,23 @@ class GameServer {
 	}
 
 	async init() {
-		await this.initPlayers();
-		await this.initGameEvents();
+		let sockets = await this.io.in(this.roomId).fetchSockets();
+		await this.initPlayers(sockets);
+		await this.initGameEvents(sockets);
 	}
 
-	async initPlayers() {
-		let sockets = await this.io.in(this.roomId).fetchSockets();
-		this.white = sockets[0];
-		this.black = sockets[1];
+	async initPlayers(sockets) {
+		let randInt = getRandomInt(0, 1);
+		this.white = sockets[randInt];
+		this.black = sockets[Math.abs(randInt - 1)];
 		this.white.emit("start-game", "white");
 		this.black.emit("start-game", "black");
 	}
 
-	async initGameEvents() {
-		let sockets = await this.io.in(this.roomId).fetchSockets();
+	async initGameEvents(sockets) {
 		sockets.forEach((socket) => {
 			socket.on("move-request", (data) => {
+				this.move(data);
 				socket.to(this.roomId).emit("move-package", {
 					movedPiece: { id: data.id, newPos: data.newPos },
 				});
@@ -71,20 +71,18 @@ class GameServer {
 		});
 	}
 
-	registerEvent(id, callback, side = "both") {
-		switch (side) {
-			case "white":
-				this.white.on(id, callback);
-				break;
-			case "black":
-				this.black.on(id, callback);
-				break;
-			case "both":
-				this.white.on(id, callback);
-				this.black.on(id, callback);
-				break;
-		}
+	move(data) {
+		console.log(this.white ? "white" : "", this.black ? "black" : "");
+		console.log(this.pieces[data.id]);
+		this.pieces[data.id].move(data.newPos);
+		console.log(this.pieces[data.id]);
 	}
 }
+
+const getRandomInt = function (min, max) {
+	min = Math.ceil(min);
+	max = Math.floor(max);
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+};
 
 module.exports = GameServer;

@@ -45,6 +45,7 @@ const init = () => {
 };
 
 async function joinRoom(socket, roomId) {
+	console.log("Joined:", roomId);
 	let connectedPlayers = io.sockets.adapter.rooms.get(roomId);
 	if (connectedPlayers?.size === 2) return false; // might want to add spectator stuff here
 
@@ -58,6 +59,8 @@ async function joinRoom(socket, roomId) {
 		if (GameServer.activeRooms) {
 			if (!Object.keys(GameServer.activeRooms).includes(roomId)) {
 				new GameServer(roomId, io);
+			} else {
+				//GameServer.activeRooms(roomId).sendBoard(socket);
 			}
 		} else {
 			new GameServer(roomId, io);

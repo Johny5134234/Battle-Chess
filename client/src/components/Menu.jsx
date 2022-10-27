@@ -48,14 +48,12 @@ const Menu = () => {
 	function requestHost(e) {
 		e.preventDefault();
 		const roomId = e.target.childNodes[0].childNodes[0].childNodes[1].value;
-		console.log(roomId);
 		socket.emit("request-host", roomId);
 	}
 
 	function requestJoin(e) {
 		e.preventDefault();
 		const roomId = e.target.childNodes[0].childNodes[0].childNodes[1].value;
-		console.log(roomId);
 		socket.emit("request-join", roomId);
 	}
 
